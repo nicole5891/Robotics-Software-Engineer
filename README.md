@@ -1,7 +1,5 @@
 # Robotics-Software-Engineer
 
-# Robotics-Software-Engineer
-
 <b>Project 1 - Build My World</b></br>
 	Built a world in Gazebo and learn to make plugins to use your script to print to terminal "Welcome to Daniel's World!".</br>
 
