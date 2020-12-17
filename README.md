@@ -3,7 +3,7 @@
 <b>Project 1 - Build My World</b></br>
 Built a world in Gazebo and learn to make plugins to use your script.</br>
 
-<b>Project 2 - Go Chase it</b></br>
+<b>Project 2 (located in catkin_ws folder) - Go Chase it</b></br>
 Using ROS - in this project the robot chases the white ball when it is in view. Sensor data (lidar, camera) is visualized with rviz. 
 
 <b>Project 3 - Where Am I</b></br>
