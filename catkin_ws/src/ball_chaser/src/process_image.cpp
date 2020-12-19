@@ -30,14 +30,13 @@ void process_image_callback(const sensor_msgs::Image img)
     const int height = img.height;
     const int step = img.step;
 
-    for (int i = 0; i<img.height* img.step; i++){
-     if (img.data[i] == white_pixel){
-            const int mod = i % img.step;
+    for (int i = 0; i<(img.height* img.step)-3; i++){
+     if (img.data[i] == white_pixel && img.data[i+1] == white_pixel && img.data[i+2] == white_pixel){
+            const int mod = (i+1) % img.step;
             position = mod/(img.step/3);
             //ROS_INFO("/process_image: Position: %i", position);
           break;      
       }
-      i+=3;
     }
 
     if (position == 0)
@@ -72,7 +71,7 @@ int main(int argc, char** argv)
     client = n.serviceClient<ball_chaser::DriveToTarget>("/ball_chaser/command_robot");
 
     // Subscribe to /camera/rgb/image_raw topic to read the image data inside the process_image_callback function
-    ros::Subscriber sub1 = n.subscribe("/camera/rgb/image_raw", 100, process_image_callback);
+    ros::Subscriber sub1 = n.subscribe("/camera/rgb/image_raw", 10, process_image_callback);
 
     // Handle ROS communication events
     ros::spin();
