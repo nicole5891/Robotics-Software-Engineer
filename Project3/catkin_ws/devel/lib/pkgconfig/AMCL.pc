@@ -1,0 +1,8 @@
+prefix=/home/robond/workspace/Project3/catkin_ws/devel
+
+Name: AMCL
+Description: Description of AMCL
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

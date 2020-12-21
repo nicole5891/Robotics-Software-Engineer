@@ -1,0 +1,8 @@
+prefix=/home/robond/workspace/Project3/catkin_ws/install
+
+Name: my_amcl
+Description: Description of my_amcl
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
