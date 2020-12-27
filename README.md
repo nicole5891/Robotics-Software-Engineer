@@ -8,6 +8,7 @@ Using ROS - in this project the robot chases the white ball when it is in view. 
 
 <b>Project 3 - Where Am I</b></br>
 In this project it focuses on Adaptive Monte Carlo Localization (AMCL) for localizing the robot in the pgm map.  Using particle cloud you can see where the robot is inside the map.
+In the /Project3/catkin_ws/src also the turtlebot incl. simulation, teleop, gmapping is included.  Gmapping is first used in Project 4. 
 
 <b>Project 4 - Map My World</b></br>
 Create a 2d occupancy grid and 3d Octomap from the simulated enviroment using RTAB-map package and the robot from the previous projects.
