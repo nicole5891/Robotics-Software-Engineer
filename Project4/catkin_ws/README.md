@@ -1,4 +1,4 @@
-# Readme Project 4
+# Project 4
 ![pic1](https://github.com/nicole5891/Robotics-Software-Engineer/blob/master/Project4/catkin_ws/rtabmap_viewer.JPG)
 ![pic2](https://github.com/nicole5891/Robotics-Software-Engineer/blob/master/Project4/catkin_ws/rtabmap.JPG)
 
