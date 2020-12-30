@@ -2,4 +2,4 @@ devel/
 logs/
 build/
 
-rtabmap.db
+*.db
