@@ -1,5 +1,4 @@
-# RoboND-Term1-P4-Map-My-World
-Project 4 of Udacity Robotics Software Engineer Nanodegree Program
+# Readme Project 4
 ![pic1](https://github.com/nicole5891/Robotics-Software-Engineer/blob/master/Project4/catkin_ws/rtabmap_viewer.JPG)
 ![pic2](https://github.com/nicole5891/Robotics-Software-Engineer/blob/master/Project4/catkin_ws/rtabmap.JPG)
 
