@@ -7,4 +7,4 @@ xterm -e "roslaunch turtlebot_rviz_launchers view_navigation.launch" &
 sleep 5
 xterm -e "roslaunch add_markers add_markers.launch" & 
 sleep 5
-xterm -e "roslaunch add_markers add_markers.launch"  
+xterm -e "roslaunch pick_objects pick_objects.launch"  

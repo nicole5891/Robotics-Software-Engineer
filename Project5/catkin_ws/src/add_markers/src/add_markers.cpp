@@ -8,15 +8,37 @@ double pickupX = 1.0;
 double pickupY = 1.0;
 double dropoffX = 2.0;
 double dropoffY = 2.0;
-bool pickup = false;
-bool dropoff = false;
-double deltaPos = 0.4;
+bool robotAtPickUp = false;
+bool robotAtDropOff = false;
+double deltaPos = 0.6;
+double distance;
+double poseX;
+double poseY;
 
-void get_current_pose(const nav_msgs::Odometry::ConstPtr& msg)
+void get_current_odometry_pose(const nav_msgs::Odometry::ConstPtr& msg)
 {
-  pickupX = msg->pose.pose.position.x;
-  pickupY = msg->pose.pose.position.y;
+  poseX = msg->pose.pose.position.x;
+  poseY = msg->pose.pose.position.y;
+
+  if ((robotAtPickUp == false) && (robotAtDropOff == true))
+  {
+    distance = sqrt(pow((pickupX - poseX), 2) + pow((pickupY - poseY), 2));
+    if (distance < deltaPos){
+      ROS_INFO("Robot reached pick-up point");
+      robotAtPickUp = true;
+    }
+  }
+  if ((robotAtPickUp == true) && (robotAtDropOff == false))
+  { 
+    ROS_INFO("Robot driving to drop-off point");
+    distance = sqrt(pow((dropoffX - poseX), 2) + pow((dropoffY - poseY), 2));
+    if (distance < deltaPos){
+      ROS_INFO("Robot reached drop-off point");
+      robotAtDropOff = true;
+    }
+  }
 }
+
 
 
 int main( int argc, char** argv )
@@ -28,9 +50,8 @@ int main( int argc, char** argv )
 
   // Set our initial shape type to be a cube
   uint32_t shape = visualization_msgs::Marker::CUBE;
+  ros::Subscriber odometry_sub = n.subscribe("/odom", 1000, get_current_odometry_pose);
 
-  while (ros::ok())
-  {
     visualization_msgs::Marker marker;
     // Set the frame ID and timestamp.  See the TF tutorials for information on these.
     marker.header.frame_id = "/map";
@@ -44,12 +65,11 @@ int main( int argc, char** argv )
     // Set the marker type.  Initially this is CUBE, and cycles between that and SPHERE, ARROW, and CYLINDER
     marker.type = shape;
 
-    // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
-    marker.action = visualization_msgs::Marker::ADD;
+
 
     // Set the pose of the marker.  This is a full 6DOF pose relative to the frame/time specified in the header
-    marker.pose.position.x = 0;
-    marker.pose.position.y = 0;
+    marker.pose.position.x = pickupX;
+    marker.pose.position.y = pickupX;
     marker.pose.position.z = 0;
     marker.pose.orientation.x = 0.0;
     marker.pose.orientation.y = 0.0;
@@ -57,9 +77,9 @@ int main( int argc, char** argv )
     marker.pose.orientation.w = 1.0;
 
     // Set the scale of the marker -- 1x1x1 here means 1m on a side
-    marker.scale.x = 1.0;
-    marker.scale.y = 1.0;
-    marker.scale.z = 1.0;
+    marker.scale.x = 0.3;
+    marker.scale.y = 0.3;
+    marker.scale.z = 0.3;
 
     // Set the color -- be sure to set alpha to something non-zero!
     marker.color.r = 0.0f;
@@ -68,6 +88,10 @@ int main( int argc, char** argv )
     marker.color.a = 1.0;
 
     marker.lifetime = ros::Duration();
+
+  while (ros::ok())
+  {
+
 
     // Publish the marker
     while (marker_pub.getNumSubscribers() < 1)
@@ -79,24 +103,24 @@ int main( int argc, char** argv )
       ROS_WARN_ONCE("Please create a subscriber to the marker");
       sleep(1);
     }
-    marker_pub.publish(marker);
-
-    // Cycle between different shapes
-    switch (shape)
+    if(robotAtPickUp == true) 
     {
-    case visualization_msgs::Marker::CUBE:
-      shape = visualization_msgs::Marker::SPHERE;
-      break;
-    case visualization_msgs::Marker::SPHERE:
-      shape = visualization_msgs::Marker::ARROW;
-      break;
-    case visualization_msgs::Marker::ARROW:
-      shape = visualization_msgs::Marker::CYLINDER;
-      break;
-    case visualization_msgs::Marker::CYLINDER:
-      shape = visualization_msgs::Marker::CUBE;
-      break;
+      // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
+      marker.action = visualization_msgs::Marker::DELETE;
+      ROS_INFO("Pickerd up!");
+      ros::Duration(2.0).sleep();
     }
+    if(robotAtDropOff == true) 
+    {
+      marker.pose.position.x = dropoffX;
+      marker.pose.position.y = dropoffY;
+      // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
+      marker.action = visualization_msgs::Marker::ADD;
+      ROS_INFO("Dropped-off up!");
+      ros::Duration(2.0).sleep();
+    }
+
+    marker_pub.publish(marker);
 
     r.sleep();
   }
