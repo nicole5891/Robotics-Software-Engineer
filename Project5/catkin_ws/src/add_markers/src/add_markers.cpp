@@ -5,8 +5,8 @@
 
 double pickupX = -1.0;
 double pickupY = -1.0;
-double dropoffX = -2.0;
-double dropoffY = -3.0;
+double dropoffX = 1.0;
+double dropoffY = 2.0;
 bool robotAtPickUp = false;
 bool robotAtDropOff = false;
 double deltaPos = 0.6;
@@ -56,6 +56,13 @@ int main( int argc, char** argv )
     marker.header.frame_id = "/map";
     marker.header.stamp = ros::Time::now();
 
+    marker.action = visualization_msgs::Marker::ADD;
+    sleep(5);
+    marker.action = visualization_msgs::Marker::DELETE;
+    sleep(5);
+    marker.action = visualization_msgs::Marker::ADD;
+
+
     // Set the namespace and id for this marker.  This serves to create a unique ID
     // Any marker sent with the same namespace and id will overwrite the old one
     marker.ns = "add_markers";
@@ -103,7 +110,7 @@ int main( int argc, char** argv )
       // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
       marker.action = visualization_msgs::Marker::DELETE;
       ROS_INFO("Pickerd up!");
-      ros::Duration(2.0).sleep();
+      sleep(5);
     }
     if(robotAtDropOff == true) 
     {
@@ -112,7 +119,7 @@ int main( int argc, char** argv )
       // Set the marker action.  Options are ADD, DELETE, and new in ROS Indigo: 3 (DELETEALL)
       marker.action = visualization_msgs::Marker::ADD;
       ROS_INFO("Dropped-off up!");
-      ros::Duration(2.0).sleep();
+      sleep(5);
     }
     marker_pub.publish(marker);
     ros::spinOnce();
