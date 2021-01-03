@@ -41,7 +41,7 @@ int main(int argc, char** argv){
    ROS_INFO("Hooray, the base moved 1 meter forward");
     ros::Duration(5).sleep();
     goal.target_pose.pose.position.x = 2.0;
-    goal.target_pose.pose.position.y = 2.0;
+    goal.target_pose.pose.position.y = 3.0;
     goal.target_pose.pose.orientation.w = 1.0;
 
     ROS_INFO("Robot is travelling to the second position (dropoff)");

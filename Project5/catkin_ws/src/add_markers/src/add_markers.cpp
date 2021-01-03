@@ -3,27 +3,28 @@
 #include <nav_msgs/Odometry.h>
 #include <cmath>
 
-
 double pickupX = 1.0;
 double pickupY = 1.0;
 double dropoffX = 2.0;
-double dropoffY = 2.0;
+double dropoffY = 3.0;
 bool robotAtPickUp = false;
 bool robotAtDropOff = false;
 double deltaPos = 0.6;
-double distance;
-double poseX;
-double poseY;
+double distanceToPickUp;
+double distanceToDropOff;
+double robot_x;
+double robot_y;
 
-void get_current_odometry_pose(const nav_msgs::Odometry::ConstPtr& msg)
+void get_current_odometry_pose(const nav_msgs::Odometry::ConstPtr& msg_position)
 {
-  poseX = msg->pose.pose.position.x;
-  poseY = msg->pose.pose.position.y;
+  robot_x = msg_position->pose.pose.position.x;
+  robot_y = msg_position->pose.pose.position.y;
 
-  if ((robotAtPickUp == false) && (robotAtDropOff == true))
+  if ((robotAtPickUp == false) && (robotAtDropOff == false))
   {
-    distance = sqrt(pow((pickupX - poseX), 2) + pow((pickupY - poseY), 2));
-    if (distance < deltaPos){
+    distanceToPickUp = sqrt(pow((pickupX - robot_x), 2) + pow((pickupY - robot_y), 2));
+    ROS_INFO("Distance to pickup = %f", distanceToPickUp);
+    if (distanceToPickUp < deltaPos){
       ROS_INFO("Robot reached pick-up point");
       robotAtPickUp = true;
     }
@@ -31,15 +32,13 @@ void get_current_odometry_pose(const nav_msgs::Odometry::ConstPtr& msg)
   if ((robotAtPickUp == true) && (robotAtDropOff == false))
   { 
     ROS_INFO("Robot driving to drop-off point");
-    distance = sqrt(pow((dropoffX - poseX), 2) + pow((dropoffY - poseY), 2));
-    if (distance < deltaPos){
+    distanceToDropOff = sqrt(pow((dropoffX - robot_x), 2) + pow((dropoffY - robot_y), 2));
+    if (distanceToDropOff < deltaPos){
       ROS_INFO("Robot reached drop-off point");
       robotAtDropOff = true;
     }
   }
 }
-
-
 
 int main( int argc, char** argv )
 {
@@ -65,8 +64,6 @@ int main( int argc, char** argv )
     // Set the marker type.  Initially this is CUBE, and cycles between that and SPHERE, ARROW, and CYLINDER
     marker.type = shape;
 
-
-
     // Set the pose of the marker.  This is a full 6DOF pose relative to the frame/time specified in the header
     marker.pose.position.x = pickupX;
     marker.pose.position.y = pickupX;
@@ -91,8 +88,6 @@ int main( int argc, char** argv )
 
   while (ros::ok())
   {
-
-
     // Publish the marker
     while (marker_pub.getNumSubscribers() < 1)
     {
@@ -119,9 +114,7 @@ int main( int argc, char** argv )
       ROS_INFO("Dropped-off up!");
       ros::Duration(2.0).sleep();
     }
-
     marker_pub.publish(marker);
-
-    r.sleep();
+    ros::spinOnce();
   }
 }
