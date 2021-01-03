@@ -1,33 +1,25 @@
 # Home service robot
 
-## Home Service function explanation:
+## Write-up: Home Service function explanation:
  
-- subscribe to odom topic to get the current position of the robot
-- compare this position with the goal position: If robot is close enough to goal position, pick up object. 
-- same for drop off position: If robot close enough to drop off position the object appears again. 
-  
+- Idea: Subscribe to odom topic to get the current position of the robot. Compare this position with the goal position: If robot distance =  goal position (+-tolerance), pick up object. Same for drop off position: If robot distance = drop off position (+-tolerance) the object appears again. 
 
-## For localization and navigation: pick_object.sh 
+## Package Explanation
 
-## For mapping test: run test_slam.sh to manually run the robot
+# Official ROS packages
+The following four official packages are used. These packages need to be imported and installed in the src directory of the prior created catkin workspace. Be sure to clone the full GitHub directory and not just the package itself.
 
-
-## Official ROS packages
-Import these packages now and install them in the src directory of your catkin workspace. Be sure to clone the full GitHub directory and not just the package itself.
-
-- gmapping: With the gmapping_demo.launch file, you can easily perform SLAM and build a map of the environment with a robot equipped with laser range finder sensors or RGB-D cameras.
-- turtlebot_teleop: With the keyboard_teleop.launch file, you can manually control a robot using keyboard commands.
-- turtlebot_rviz_launchers: With the view_navigation.launch file, you can load a preconfigured rviz workspace. You’ll save a lot of time by launching this file, because it will automatically load the robot model, trajectories, and map for you.
-- turtlebot_gazebo: With the turtlebot_world.launch you can deploy a turtlebot in a gazebo environment by linking the world file to it.
+- slam_gmapping: This package contains a ROS wrapper for OpenSlam's Gmapping. The gmapping package provides laser-based SLAM (Simultaneous Localization and Mapping), as a ROS node called slam_gmapping. Using slam_gmapping, you can create a 2-D occupancy grid map from laser and pose data collected by a mobile robot. 
+- turtlebot_rviz_launchers: With the view_navigation.launch file, you can load a preconfigured rviz workspace. You’ll save a lot of time by launching this file, because it will automatically load the robot model, trajectories, and map for you. Within this rviz configuration a Marker is added that will be used as pick up object. 
+- turtlebot_gazebo: With the turtlebot_world.launch you can deploy a turtlebot in a gazebo environment by linking the world file to it. This package also includes the amcl.launch which runs the monte carlo localization. 
 
 ## Your Packages and Directories
-You’ll install these packages and create the directories as you go through the project.
+The following packages need to be self created in the directories:
  
-- map: Inside this directory, you will store your gazebo world file and the map generated from SLAM.
-- scripts: Inside this directory, you’ll store your shell scripts.
-- rvizConfig: Inside this directory, you’ll store your customized rviz configuration files.
-- pick_objects: You will write a node that commands your robot to drive to the pickup and drop off zones.
-- add_markers: You will write a node that model the object with a marker in rviz.
+- scripts: Inside this directory, you’ll store your shell scripts. Shall scripts will be configured to automatically launch several ros launch files. The home_service.sh script is called to launch all files for running the robot in the world and let him pick up and drop off the object in rviz visualization. 
+- config: Inside this directory, you’ll store your customized rviz configuration files (project5.rviz).
+- pick_objects: You will write a navigation node that commands your robot to drive to the pickup and drop off zones. Robots inital and goal position are defined in the pick_object.cpp. 
+- add_markers: You will write a node that model the object with a marker in rviz. The markers behavior; disappearing if pick up point is reached and appearing again as soon as the drop-off point is reached is defined in the add_markers.cpp. 
 
 
 ## File struction  
@@ -36,14 +28,12 @@ You’ll install these packages and create the directories as you go through the
     ├── slam_gmapping                  # gmapping_demo.launch file                     
     │   ├── gmapping  
     │   ├── ...  
-    ├── turtlebot                      # keyboard_teleop.launch file  
-    │   ├── turtlebot_teleop  
-    │   ├── ...  
     ├── turtlebot_interactions         # view_navigation.launch file        
     │   ├── turtlebot_rviz_launchers  
     │   ├── ...  
-    ├── turtlebot_simulator            # turtlebot_world.launch file   
-    │   ├── turtlebot_gazebo  
+    ├── turtlebot_simulator               
+    │   ├── turtlebot_gazebo           # amcl_demo.launch file
+    |   |                              # turtlebot_world.launch file
     │   ├── ...  
     |  
     ├── map                            # map files  
@@ -80,3 +70,7 @@ $ source devel/setup.bash
 $ chmod u+x ./src/scripts/home_service.sh
 $ ./src/scripts/home_service.sh
 ```
+
+# Fruther Information:
+For localization and navigation: pick_object.sh 
+For mapping test: run test_slam.sh to manually run the robot
