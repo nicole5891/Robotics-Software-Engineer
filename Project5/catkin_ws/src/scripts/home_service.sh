@@ -1,6 +1,7 @@
 #!/bin/sh
-xterm -e "roslaunch turtlebot_gazebo turtlebot_world.launch" &
+
 #xterm  -e  "roslaunch turtlebot_gazebo turtlebot_world.launch world_file:=\"/home/robond/workspace/Project5/catkin_ws/src/my_robot/worlds/NicolesOffice.world\"" &
+xterm -e "roslaunch turtlebot_gazebo turtlebot_world.launch" &
 sleep 5
 xterm -e "roslaunch turtlebot_gazebo amcl_demo.launch" &
 sleep 5
