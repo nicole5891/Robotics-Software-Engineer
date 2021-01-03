@@ -3,10 +3,10 @@
 #include <nav_msgs/Odometry.h>
 #include <cmath>
 
-double pickupX = 1.0;
-double pickupY = 1.0;
-double dropoffX = 2.0;
-double dropoffY = 3.0;
+double pickupX = -1.0;
+double pickupY = -1.0;
+double dropoffX = -2.0;
+double dropoffY = -3.0;
 bool robotAtPickUp = false;
 bool robotAtDropOff = false;
 double deltaPos = 0.6;
