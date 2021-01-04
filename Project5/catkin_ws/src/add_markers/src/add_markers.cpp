@@ -56,12 +56,6 @@ int main( int argc, char** argv )
     marker.header.frame_id = "/map";
     marker.header.stamp = ros::Time::now();
 
-    marker.action = visualization_msgs::Marker::ADD;
-    sleep(5);
-    marker.action = visualization_msgs::Marker::DELETE;
-    sleep(5);
-    marker.action = visualization_msgs::Marker::ADD;
-
 
     // Set the namespace and id for this marker.  This serves to create a unique ID
     // Any marker sent with the same namespace and id will overwrite the old one
@@ -69,7 +63,7 @@ int main( int argc, char** argv )
     marker.id = 0;
 
     // Set the marker type.  Initially this is CUBE, and cycles between that and SPHERE, ARROW, and CYLINDER
-    marker.type = shape;
+    marker.type = shape;l
 
     // Set the pose of the marker.  This is a full 6DOF pose relative to the frame/time specified in the header
     marker.pose.position.x = pickupX;
